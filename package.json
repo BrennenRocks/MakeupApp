@@ -1,0 +1,29 @@
+{
+  "name": "makeupapp",
+  "version": "1.0.0",
+  "description": "Website to find best makeup for best prices",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrennenRocks/MakeupApp.git"
+  },
+  "keywords": [
+    "Makeup",
+    "Prices",
+    "Cheap"
+  ],
+  "author": "Brennen Davis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BrennenRocks/MakeupApp/issues"
+  },
+  "homepage": "https://github.com/BrennenRocks/MakeupApp#readme",
+  "dependencies": {
+    "express": "^4.15.3",
+    "mongoose": "^4.11.1"
+  }
+}
