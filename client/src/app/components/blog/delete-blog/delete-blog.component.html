@@ -1,0 +1,44 @@
+<div class="ui huge header">Delete Blog</div>
+
+<div class="ui message" [ngClass]="messageClass">
+  <p>{{ message }}</p>
+</div>
+
+<div *ngIf="foundBlog">
+  <div class="ui segment">
+    <div class="ui divided items">
+      <div class="item">
+        <div class="image">
+            <!-- <img src=""> -->
+            Image
+        </div>
+        <div class="content">
+          <a class="header" href="#">{{ blog.title }}</a>
+          <div class="meta">
+            <span>{{ blog.createdAt | date: 'MMM dd, yyyy' }}</span>
+            <span class="ui right floated">Posted By - {{ blog.createdBy }}</span>
+          </div>
+          <div class="description">
+            <p>{{ blog.body }}</p>
+          </div>
+        </div> <!-- End content -->
+      </div>
+    </div>
+  </div>
+  <div class="ui red raised segment">
+    <div class="ui divided items">
+      <div class="item">
+        <div class="content">
+          <div class="header">Confirm</div>
+          <div class="description">
+            <p>Are you sure you would like to delete this blog?</p>
+          </div>
+          <div class="extra">
+            <button [disabled]="isProcessing" class="ui red button" (click)="deleteBlog()">Yes</button>
+            <button [disabled]="isProcessing" class="ui green button" routerLink="/blog">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

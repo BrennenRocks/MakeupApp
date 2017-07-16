@@ -1,0 +1,41 @@
+.ui.popup{
+  padding:0;
+}
+/* Like and Dislike popup Scrolling */
+.ui.popup .list {
+  max-height:150px;
+  overflow:hidden;
+  overflow-y:scroll;
+  padding:10px;
+}
+
+/* Form Success Input */
+.ui.form .field.success label {
+    color: #308330;
+}
+.ui.form .field.success input {
+    background: #f4faf4 none repeat scroll 0 0;
+    border-color: #a3c293;
+    border-radius: 0.285714rem;
+    box-shadow: none;
+    color: #308330;
+}
+/* Success Placeholder */
+.ui.form .success ::-webkit-input-placeholder {
+    color: #5e9e5e;
+}
+.ui.form .success ::-ms-input-placeholder {
+    color: #5e9e5e;
+}
+.ui.form .success ::-moz-placeholder {
+    color: #5e9e5e;
+}
+.ui.form .success :focus::-webkit-input-placeholder {
+    color: #558e55;
+}
+.ui.form .success :focus::-ms-input-placeholder {
+    color: #558e55;
+}
+.ui.form .success :focus::-moz-placeholder {
+    color: #558e55;
+}

@@ -1,0 +1,156 @@
+<div class="ui huge header">My Makeup Blog</div>
+
+<div class="ui message" [ngClass]="messageClass">
+  <p>{{ message }}</p>
+</div>
+
+<div class="ui olive button" *ngIf="isAdmin() && !newPost" (click)="newBlogForm()">New Post</div>
+
+<div *ngIf="newPost">
+  <form class="ui form error success" [formGroup]="form" name="blogForm" (submit)="onBlogSubmit()">
+    <div class="ui segment">
+      <!-- Title Field -->
+      <div class="field" [ngClass]="{'error': form.controls.title.dirty && form.controls.title.errors, 'success': form.controls.title.valid }">
+        <label>Title</label>
+        <div class="ui left icon input">
+          <i class="rocket icon"></i>
+          <input type="text" formControlName="title" name="title" placeholder="Title">
+        </div>
+      </div>
+      <!-- Title Errors -->
+      <div class="ui error message" *ngIf="form.controls.title.errors && form.controls.title.dirty">
+        <div class="ui bulleted list">
+          <div class="item" *ngIf="form.controls.title.errors?.required">This Field is Required</div>
+          <div class="item" *ngIf="form.controls.title.errors?.minlength || form.controls.title.errors?.maxlength">Min Length: 5, Max Length: 50</div>
+          <div class="item" *ngIf="form.controls.title.errors?.alphaNumericValidation">Must be a letter or number</div>
+        </div>
+      </div>
+      <!-- Body Field -->
+      <div class="field" [ngClass]="{'error': form.controls.body.dirty && form.controls.body.errors, 'success': form.controls.body.valid }">
+        <label>Body</label>
+        <textarea formControlName="body" name="body" rows="8" cols="80" placeholder="Body"></textarea>
+      </div>
+      <!-- Body Errors -->
+      <div class="ui error message" *ngIf="form.controls.body.errors && form.controls.body.dirty">
+        <div class="ui bulleted list">
+          <div class="item" *ngIf="form.controls.body.errors?.required">This Field is Required</div>
+          <div class="item" *ngIf="form.controls.body.errors?.minlength || form.controls.body.errors?.maxlength">Min Length: 5, Max Length: 500</div>
+        </div>
+      </div>
+      <button [disabled]="isProcessing" class="ui orange button" (click)="goBack()">Cancel</button>
+      <input [disabled]="isProcessing || !form.valid" type="submit" class="ui olive submit button" value="Submit Post">
+    </div>
+  </form>
+</div>
+
+<!-- Show Posts -->
+<div class="ui top segment">
+    <div class="ui divided items">
+        <div *ngFor="let blog of blogPosts" class="item">
+            <div class="image">
+                <!-- <img src=""> -->
+                Image
+            </div>
+            <div class="content">
+                <a class="header" href="#">{{ blog.title }}</a>
+                <div class="meta">
+                    <span>{{ blog.createdAt | date: 'MMM dd, yyyy' }}</span>
+                    <span class="ui right floated">Posted By - {{ blog.createdBy }}</span>
+                </div>
+                <div class="description">
+                    <p>{{ blog.body }}</p>
+                </div>
+                <div class="extra">
+                  <!-- Like Button -->
+                  <div class="ui labeled like button" tabindex="0" (click)="likeBlog(blog._id)">
+                    <div class="ui red button">
+                      <i class="thumbs up icon"></i> Like
+                    </div>
+                    <a class="ui basic red left pointing label">
+                      {{ blog.likes }}
+                    </a>
+                  </div>
+                  <div class="ui like popup" >
+                    <div class="ui selection list">
+                      <div class="item" *ngFor="let liker of blog.likedBy">
+                        <div class="header" [routerLink]="['/user/', liker]">{{ liker }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Dislike Button -->
+                  <div  class="ui left labeled dislike button" tabindex="0" (click)="dislikeBlog(blog._id)">
+                    <a class="ui basic blue right pointing label">
+                      {{ blog.dislikes }}
+                    </a>
+                    <div class="ui blue button">
+                      <i class="thumbs down icon"></i> Dislike
+                    </div>
+                  </div>
+                  <div class="ui popup">
+                    <div class="ui selection list">
+                      <div class="item" *ngFor="let disliker of blog.dislikedBy">
+                        <div class="header" [routerLink]="['/user/', disliker]">{{ disliker }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <button class="ui mini red right floated button" *ngIf="isAdmin()" [routerLink]="['/delete-blog/', blog._id]">Delete</button>
+                  <button class="ui mini yellow right floated button" *ngIf="isAdmin()" [routerLink]="['/edit-blog/', blog._id]">Edit</button>
+                  <button [disabled]="newComment.indexOf(blog._id) > -1" class="ui yellow right floated button" *ngIf="authService.loggedIn()" (click)="draftComment(blog._id)" >
+                    <i class="comment icon"></i>&nbsp;&nbsp;Post Comment
+                  </button>
+                </div> <!-- End extra -->
+                <div *ngIf="newComment.indexOf(blog._id) > -1">
+                  <form class="ui form error success" [formGroup]="commentForm">
+                    <div class="field" [ngClass]="{'error': commentForm.controls.comment.errors && commentForm.controls.comment.dirty, 'success': !commentForm.controls.comment.errors}">
+                      <textarea formControlName="comment" name="comment" rows="10" cols="30"></textarea>
+                      <div class="ui error message" *ngIf="commentForm.controls.comment.errors && commentForm.controls.comment.dirty">
+                        <div class="ui bulleted list">
+                          <div class="item" *ngIf="commentForm.controls.comment.errors?.required">This Field is Required</div>
+                          <div class="item" *ngIf="commentForm.controls.comment.errors?.minlength || commentForm.controls.comment.errors?.maxlength">Comment must be less than 200 characters</div>
+                        </div>
+                      </div>
+                    </div>
+                    <button [disabled]="!commentForm.valid || isProcessing" class="ui blue labeled submit icon button" type="submit" (click)="postComment(blog._id)">
+                      <i class="icon edit"></i> Submit Comment
+                    </button>
+                    <button [disabled]="isProcessing" class="ui orange labeled icon button" (click)="cancelSubmission(blog._id)">
+                      <i class="icon edit"></i> Cancel
+                    </button>
+                  </form>
+                </div>
+                <div *ngIf="enabledComments.indexOf(blog._id) === -1 && blog.comments.length > 0">
+                  <br />
+                  <span class="ui small purple button" (click)="expand(blog._id)">
+                    Read Comments&nbsp;&nbsp;
+                    <i class="icon comments"></i>
+                  </span>
+                </div>
+                <div *ngIf="enabledComments.indexOf(blog._id) > -1">
+                  <br />
+                  <span class="ui small purple button" (click)="collapse(blog._id)">
+                    Hide Comments&nbsp;&nbsp;
+                    <i class="icon comments"></i>
+                  </span>
+                </div>
+                <!-- Start Comments -->
+                <div class="ui small minimal comments segment" *ngIf="enabledComments.indexOf(blog._id) > -1">
+                  <h3 class="ui dividing header">Comments</h3>
+                  <div class="comment" *ngFor="let comment of blog.comments">
+                    <!-- <a class="avatar">
+                      <img src="/images/avatar/small/joe.jpg">
+                    </a> -->
+                    <div class="content">
+                      <a class="author">{{ comment.commentator }}</a>
+                      <div class="metadata">
+                        <span class="date">{{ comment.createdAt | date: 'MMM dd, yyyy' }}</span>
+                      </div>
+                      <div class="text">
+                        {{  comment.comment }}
+                      </div>
+                    </div>
+                  </div>
+                </div> <!-- End Comments -->
+            </div> <!-- End content -->
+        </div>
+    </div>
+</div>

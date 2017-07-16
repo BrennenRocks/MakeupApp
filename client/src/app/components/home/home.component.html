@@ -1,0 +1,29 @@
+<div class="ui message">
+  <div class="ui header center aligned" style="font-size: 4em;">
+    Makeup Space
+  </div>
+  <p class="ui center aligned grid" style="font-size: 1.3em;">
+    The only place to find the best prices on any Products and where to find them. You will be able to make a list of your favorite products
+    and keep tabs on the cheapest place to buy them. You will also be able to see how other people rate them and what they may say is better.
+  </p>
+  <div class="ui center aligned grid">
+    <a class="ui pink button" *ngIf="!authService.loggedIn()" routerLink="/login">Login</a>
+    <a class="ui blue button" *ngIf="!authService.loggedIn()"routerLink="/register">Register</a>
+    <a class="ui blue button" *ngIf="authService.loggedIn()"routerLink="/blog">View Blog</a>
+  </div>
+</div>
+
+<div class="ui stackable three column grid">
+  <div class="column">
+    <div class="ui header"><i class="money icon"></i> Prices and Location</div>
+    <p>Find the best prices on the makeup products you love and find where to buy them</p>
+  </div>
+  <div class="column">
+    <div class="ui header"><i class="comments icon"></i> Reviews</div>
+    <p>Users will be able to rate and comment on the different products that are found and listed here to see if the price is really worth it.</p>
+  </div>
+  <div class="column">
+    <div class="ui header"><i class="sort alphabet ascending icon"></i>Your Own List</div>
+    <p>Keep a list of your favorite products and know exactly where to buy them for the cheapest price.</p>
+  </div>
+</div>

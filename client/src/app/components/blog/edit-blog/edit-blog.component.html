@@ -1,0 +1,28 @@
+<div class="ui huge header">Edit Blog</div>
+
+<div class="ui message" [ngClass]="messageClass">
+  <p>{{ message }}</p>
+</div>
+
+<form class="ui form" (submit)="updateBlogSubmit()" *ngIf="!isLoading">
+  <div class="ui segment">
+    <!-- Title Field -->
+    <div class="field">
+      <label for="title">Title</label>
+      <div class="ui left icon input">
+        <i class="rocket icon"></i>
+        <input [disabled]="isProcessing" type="text" [(ngModel)]="blog.title" name="title" placeholder="Title">
+      </div>
+    </div>
+    <!-- Body Field -->
+    <div class="field">
+      <label for="body">Body</label>
+      <textarea [disabled]="isProcessing" [(ngModel)]="blog.body" name="body" rows="8" cols="80" placeholder="Body"></textarea>
+    </div>
+    <button [disabled]="isProcessing" class="ui red button" [routerLink]="['/delete-blog/', blog._id]">Delete</button>
+    <button [disabled]="isProcessing" class="ui orange button" (click)="goBack()">Cancel</button>
+    <input [disabled]="isProcessing" type="submit" class="ui olive submit button" value="Save Changes">
+  </div>
+</form>
+
+<button [disabled]="isProcessing" class="ui orange button" (click)="goBack()" *ngIf="isLoading">Cancel</button>

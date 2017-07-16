@@ -1,0 +1,59 @@
+<div class="ui borderless menu">
+  <a class="header item" routerLink="/" >Makeup</a>
+  <a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/">Home</a>
+  <a class="browse item">
+    Face
+    <i class="dropdown icon"></i>
+  </a>
+  <div class="ui container popup transition hidden">
+    <div class="ui three column relaxed equal height divided grid">
+      <div class="column">
+        <a class="ui small header">Eyes</a>
+        <div class="ui link list">
+          <a class="item">Eyeshadow</a>
+          <a class="item">Mascara</a>
+          <a class="item">Eyebrows</a>
+          <a class="item">Eyelashes</a>
+        </div>
+      </div>
+      <div class="column">
+        <a class="ui small header">Cheeks</a>
+        <div class="ui link list">
+          <a class="item">Blush</a>
+          <a class="item">Face Powder</a>
+          <a class="item">Large</a>
+          <a class="item">Plus Sizes</a>
+        </div>
+      </div>
+      <div class="column">
+        <h4 class="ui header">Lips</h4>
+        <div class="ui link list">
+          <a class="item">Neutrals</a>
+          <a class="item">Brights</a>
+          <a class="item">Pastels</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="right menu">
+    <div class="item">
+      <div class="ui action left icon input">
+        <i class="search icon"></i>
+        <input type="text" placeholder="Search for Products">
+        <button class="ui button">Submit</button>
+      </div>
+    </div>
+    <a class="item" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/dashboard">Dashboard</a>
+    <a class="item" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/profile">Profile</a>
+    <a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/blog">Blog</a>
+    <div class="item" *ngIf="!authService.loggedIn()">
+      <div class="ui pink button" routerLink="/login">Login</div>
+    </div>
+    <div class="item" *ngIf="!authService.loggedIn()">
+      <div class="ui blue button" routerLink="/register">Sign Up</div>
+    </div>
+    <div class="item" *ngIf="authService.loggedIn()">
+      <div class="ui blue button" (click)="onLogoutClick()">Logout</div>
+    </div>
+  </div>
+</div>

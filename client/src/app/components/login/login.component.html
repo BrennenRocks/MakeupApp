@@ -1,0 +1,49 @@
+<div class="ui message" [ngClass]="messageClass">
+  <p>{{ message }}</p>
+</div>
+
+<div class="ui middle aligned center aligned grid">
+  <div class="column">
+    <h2 class="ui teal dividing header">
+      <div class="content">
+        Sign Up Here
+      </div>
+    </h2>
+    <!-- Start Form -->
+    <form class="ui large form error success" [formGroup]="form" (submit)="onLoginSubmit()">
+      <div class="ui stacked segment">
+        <!-- Username Field -->
+        <div class="field" [ngClass]="{'error': form.controls.username.errors && form.controls.username.dirty, 'success': form.controls.username.valid && form.controls.username.dirty}">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="text" formControlName="username" name="username" placeholder="Username">
+          </div>
+        </div>
+        <!-- Username Errors -->
+        <div class="ui error message" *ngIf="form.controls.username.errors && form.controls.username.dirty">
+          <div class="ui bulleted list">
+            <div class="item" *ngIf="form.controls.username.errors?.required">This Field is Required</div>
+          </div>
+        </div>
+        <!-- Password Field -->
+        <div class="field" [ngClass]="{'error': form.controls.password.errors && form.controls.password.dirty, 'success': form.controls.password.valid && form.controls.password.dirty}">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" formControlName="password" name="password" placeholder="Password">
+          </div>
+        </div>
+        <!-- Password Errors -->
+        <div class="ui error message" *ngIf="form.controls.password.errors && form.controls.password.dirty">
+          <div class="ui bulleted list">
+            <div class="item" *ngIf="form.controls.password.errors?.required">This Field is Required</div>
+          </div>
+        </div>
+        <!-- Submit Button -->
+        <input [disabled]="!form.valid || isProcessing" type="submit" class="ui fluid large teal submit button" value="Login">
+      </div>
+    </form>
+    <div class="ui message">
+      New to us? <a routerLink="/register">Sign Up</a>
+    </div>
+  </div>
+</div>

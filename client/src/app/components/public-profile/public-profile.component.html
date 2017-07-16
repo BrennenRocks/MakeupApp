@@ -1,0 +1,21 @@
+<div class="ui huge dividing header">{{ currentUrl.username }}</div>
+
+<div class="ui message" [ngClass]="messageClass">
+  <p>{{ message }}</p>
+</div>
+
+<div *ngIf="foundProfile">
+  <div class="ui huge dividing header">{{ username }}</div>
+  <div class="ui divided items">
+    <div class="item">
+      <div class="content">
+        <div class="header">
+          About Me
+        </div>
+        <div class="description">
+          <p>This is where you will be able to say where you like to shop and your favorite brands</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

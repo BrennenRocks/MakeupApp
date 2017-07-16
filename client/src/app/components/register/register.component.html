@@ -1,0 +1,84 @@
+<div class="ui message" [ngClass]="messageClass">
+  <p>{{ message }}</p>
+</div>
+
+<div class="ui middle aligned center aligned grid">
+  <div class="column">
+    <h2 class="ui teal dividing header">
+      <div class="content">
+        Sign Up Here
+      </div>
+    </h2>
+    <!-- Start Form -->
+    <form class="ui large form error success" [formGroup]="form" (submit)="onRegisterSubmit()">
+      <div class="ui stacked segment">
+        <!-- Username Field -->
+        <div class="field" [ngClass]="{'error': (form.controls.username.errors && form.controls.username.dirty) || (!isUsernameValid && form.controls.username.dirty),
+        'success': !form.controls.username.errors && isUsernameValid}">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="text" formControlName="username" name="username" placeholder="Username" (blur)="checkUsername()">
+          </div>
+        </div>
+        <!-- Username Errors -->
+        <div class="ui error message" *ngIf="(form.controls.username.errors || !isUsernameValid) && form.controls.username.dirty">
+          <div class="ui bulleted list">
+            <div class="item" *ngIf="form.controls.username.errors?.required ">This Field is Required</div>
+            <div class="item" *ngIf="form.controls.username.errors?.minlength || form.controls.username.errors?.maxlength">Minimum Characters: 3, Maximum Characters: 15</div>
+            <div class="item" *ngIf="form.controls.username.errors?.validateUsername">Usernames can only contain letters and numbers</div>
+            <div class="item" *ngIf="usernameMessage">{{ usernameMessage }}</div>
+          </div>
+        </div>
+        <!-- Email Field -->
+        <div class="field" [ngClass]="{'error': (form.controls.email.errors && form.controls.email.dirty) || (!isEmailValid && form.controls.email.dirty),
+        'success': !form.controls.email.errors && isEmailValid}">
+          <div class="ui left icon input">
+            <i class="mail icon"></i>
+            <input type="text" formControlName="email" name="email" placeholder="E-mail address" (blur)="checkEmail()">
+          </div>
+        </div>
+        <!-- Email Errors -->
+        <div class="ui error message" *ngIf="(form.controls.email.errors || !isEmailValid) && form.controls.email.dirty">
+          <div class="ui bulleted list">
+            <div class="item" *ngIf="form.controls.email.errors?.required">This Field is Required</div>
+            <div class="item" *ngIf="form.controls.email.errors?.minlength || form.controls.email.errors?.maxlength">Minimum Characters: 5, Maximum Characters: 30</div>
+            <div class="item" *ngIf="form.controls.email.errors?.validateEmail">This must be a valid Email Address</div>
+            <div class="item" *ngIf="emailMessage">{{ emailMessage }}</div>
+          </div>
+        </div>
+        <!-- Password Field -->
+        <div class="field" [ngClass]="{'error': (form.controls.password.errors && form.controls.password.dirty), 'success': !form.controls.password.errors}">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" formControlName="password" name="password" placeholder="Password">
+          </div>
+        </div>
+        <!-- Password Errors -->
+        <div class="ui error message" *ngIf="form.controls.password.errors && form.controls.password.dirty">
+          <div class="ui bulleted list">
+            <div class="item" *ngIf="form.controls.password.errors?.required">This Field is Required</div>
+            <div class="item" *ngIf="form.controls.password.errors?.minlength || form.controls.password.errors?.maxlength">Minimum Characters: 8, Maximum Characters: 35</div>
+            <div class="item" *ngIf="form.controls.password.errors?.validatePassword">Passwords must have at least one uppercase, lowercase, special character, and a number</div>
+          </div>
+        </div>
+        <!-- Confirm Field -->
+        <div class="field" [ngClass]="{'error': (form.controls.confirm.errors && form.controls.confirm.dirty) ||
+          (form.errors?.matchingPasswords && form.controls.confirm.dirty), 'success': !form.controls.confirm.errors && !form.errors?.matchingPasswords}">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" formControlName="confirm" name="confirm" placeholder="Confirm Password">
+          </div>
+        </div>
+        <!-- Confirm Errors -->
+        <div class="ui error message" *ngIf="(form.controls.confirm.errors && form.controls.confirm.dirty) || (form.errors?.matchingPasswords && form.controls.confirm.dirty)">
+          <div class="ui bulleted list">
+            <div class="item" *ngIf="form.controls.confirm.errors?.required">This Field is Required</div>
+            <div class="item" *ngIf="form.errors?.matchingPasswords">Passwords must match!</div>
+          </div>
+        </div>
+        <!-- Submit Button -->
+        <input [disabled]="!form.valid || isProcessing || !isEmailValid || !isUsernameValid" type="submit" class="ui fluid large teal submit button" value="Sign Up">
+      </div>
+    </form>
+  </div>
+</div>
