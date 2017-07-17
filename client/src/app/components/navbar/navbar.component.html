@@ -44,7 +44,7 @@
       </div>
     </div>
     <a class="item" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/dashboard">Dashboard</a>
-    <a class="item" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/profile">Profile</a>
+    <a class="item" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/profile">Hello, {{ username }}</a>
     <a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/blog">Blog</a>
     <div class="item" *ngIf="!authService.loggedIn()">
       <div class="ui pink button" routerLink="/login">Login</div>

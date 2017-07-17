@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, NavigationStart } from '@angular/router';
 import { FlashMessagesService } from 'angular2-flash-messages';
 
 declare const $: any;
@@ -12,6 +12,8 @@ declare const $: any;
 })
 export class NavbarComponent implements OnInit {
 
+  username: String;
+
   constructor(
     public authService: AuthService,
     private router: Router,
@@ -19,6 +21,21 @@ export class NavbarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.router.events.subscribe((val) => {
+      this.username = "username";
+      if(this.authService.loggedIn()){
+        if(val instanceof NavigationStart){
+          this.authService.getProfile().subscribe(data => { //passes back username, email, and role
+            this.username = data.user.username;
+          },
+          err => {
+            console.log(err);
+            return false;
+          });
+        }
+      }
+    });
+
     $('.menu .browse').popup({
         inline   : true,
         hoverable: true,
