@@ -13,7 +13,7 @@ export class PublicProfileComponent implements OnInit {
   message: String;
   currentUrl: any;
   username: String;
-  foundProfile: false;
+  foundProfile: Boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -30,6 +30,7 @@ export class PublicProfileComponent implements OnInit {
         this.message = data.message;
       }else{
         this.username = data.user.username;
+        this.foundProfile = true;
       }
 
     })
