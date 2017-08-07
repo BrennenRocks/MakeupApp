@@ -22,7 +22,6 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.router.events.subscribe((val) => {
-      this.username = "username";
       if(this.authService.loggedIn()){
         if(val instanceof NavigationStart){
           this.authService.getProfile().subscribe(data => { //passes back username, email, and role

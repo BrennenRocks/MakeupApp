@@ -9,36 +9,50 @@
 <div *ngIf="newPost">
   <form class="ui form error success" [formGroup]="form" name="blogForm" (submit)="onBlogSubmit()">
     <div class="ui segment">
-      <!-- Title Field -->
-      <div class="field" [ngClass]="{'error': form.controls.title.dirty && form.controls.title.errors, 'success': form.controls.title.valid }">
-        <label>Title</label>
-        <div class="ui left icon input">
-          <i class="rocket icon"></i>
-          <input type="text" formControlName="title" name="title" placeholder="Title">
+      <div class="ui grid">
+        <div class="ui medium rounded image four wide column">
+          <img src="/images/defaultBlog.png">
+          <button class="ui button">Browse</button>
+          <div class="ui active progress">
+            <div class="bar">
+              <div class="progress"></div>
+            </div>
+            <div class="label">Uploading Image</div>
+          </div>
+        </div>
+        <div class="twelve wide column">
+          <!-- Title Field -->
+          <div class="field" [ngClass]="{'error': form.controls.title.dirty && form.controls.title.errors, 'success': form.controls.title.valid }">
+            <label>Title</label>
+            <div class="ui left icon input">
+              <i class="rocket icon"></i>
+              <input type="text" formControlName="title" name="title" placeholder="Title">
+            </div>
+          </div>
+          <!-- Title Errors -->
+          <div class="ui error message" *ngIf="form.controls.title.errors && form.controls.title.dirty">
+            <div class="ui bulleted list">
+              <div class="item" *ngIf="form.controls.title.errors?.required">This Field is Required</div>
+              <div class="item" *ngIf="form.controls.title.errors?.minlength || form.controls.title.errors?.maxlength">Min Length: 5, Max Length: 50</div>
+              <div class="item" *ngIf="form.controls.title.errors?.alphaNumericValidation">Must be a letter or number</div>
+            </div>
+          </div>
+          <!-- Body Field -->
+          <div class="field" [ngClass]="{'error': form.controls.body.dirty && form.controls.body.errors, 'success': form.controls.body.valid }">
+            <label>Body</label>
+            <textarea formControlName="body" name="body" rows="8" cols="80" placeholder="Body"></textarea>
+          </div>
+          <!-- Body Errors -->
+          <div class="ui error message" *ngIf="form.controls.body.errors && form.controls.body.dirty">
+            <div class="ui bulleted list">
+              <div class="item" *ngIf="form.controls.body.errors?.required">This Field is Required</div>
+              <div class="item" *ngIf="form.controls.body.errors?.minlength || form.controls.body.errors?.maxlength">Min Length: 5, Max Length: 500</div>
+            </div>
+          </div>
+          <button [disabled]="isProcessing" class="ui orange button right floated" (click)="goBack()">Cancel</button>
+          <input [disabled]="isProcessing || !form.valid" type="submit" class="ui olive submit button right floated" value="Submit Post">
         </div>
       </div>
-      <!-- Title Errors -->
-      <div class="ui error message" *ngIf="form.controls.title.errors && form.controls.title.dirty">
-        <div class="ui bulleted list">
-          <div class="item" *ngIf="form.controls.title.errors?.required">This Field is Required</div>
-          <div class="item" *ngIf="form.controls.title.errors?.minlength || form.controls.title.errors?.maxlength">Min Length: 5, Max Length: 50</div>
-          <div class="item" *ngIf="form.controls.title.errors?.alphaNumericValidation">Must be a letter or number</div>
-        </div>
-      </div>
-      <!-- Body Field -->
-      <div class="field" [ngClass]="{'error': form.controls.body.dirty && form.controls.body.errors, 'success': form.controls.body.valid }">
-        <label>Body</label>
-        <textarea formControlName="body" name="body" rows="8" cols="80" placeholder="Body"></textarea>
-      </div>
-      <!-- Body Errors -->
-      <div class="ui error message" *ngIf="form.controls.body.errors && form.controls.body.dirty">
-        <div class="ui bulleted list">
-          <div class="item" *ngIf="form.controls.body.errors?.required">This Field is Required</div>
-          <div class="item" *ngIf="form.controls.body.errors?.minlength || form.controls.body.errors?.maxlength">Min Length: 5, Max Length: 500</div>
-        </div>
-      </div>
-      <button [disabled]="isProcessing" class="ui orange button" (click)="goBack()">Cancel</button>
-      <input [disabled]="isProcessing || !form.valid" type="submit" class="ui olive submit button" value="Submit Post">
     </div>
   </form>
 </div>

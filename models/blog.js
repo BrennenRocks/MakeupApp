@@ -78,6 +78,7 @@ const commentValidators = [
 
 const blogSchema = mongoose.Schema({
   title: { type: String, required: true, validate: titleValidators },
+  image: { type: String },
   body: { type: String, required: true, validate: bodyValidators },
   createdBy: { type: String },
   createdAt: { type: Date, default: Date.now() },
