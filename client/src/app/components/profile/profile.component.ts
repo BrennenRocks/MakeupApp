@@ -15,7 +15,7 @@ export class ProfileComponent implements OnInit {
   isLoading: Boolean = true;
   isProcessing: Boolean = false;
   editMode: Boolean = false;
-  public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/authentication/upload' });
+  public uploader: FileUploader = new FileUploader({ url: 'authentication/upload' });
 
   constructor(
     private authService: AuthService,

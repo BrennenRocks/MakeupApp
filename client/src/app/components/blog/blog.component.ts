@@ -25,7 +25,7 @@ export class BlogComponent implements OnInit {
   imageName: String;
   newComment = [];
   enabledComments = [];
-  public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/authentication/upload' });
+  public uploader: FileUploader = new FileUploader({ url: 'authentication/upload' });
 
   constructor(
     public authService: AuthService,

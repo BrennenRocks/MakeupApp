@@ -17,7 +17,7 @@ export class EditBlogComponent implements OnInit {
   isProcessing: Boolean = false;
   currentUrl: any;
   isLoading: Boolean = true;
-  public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/authentication/upload' });
+  public uploader: FileUploader = new FileUploader({ url: 'authentication/upload' });
 
   constructor(
     private location: Location,
