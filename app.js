@@ -44,7 +44,7 @@ app.use('/authentication', authentication);
 app.use('/blogs', blogs);
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/public/index.html'));
+  res.sendFile(path.join(__dirname + '/app/public/index.html'));
 });
 
 app.listen(port, () => {
