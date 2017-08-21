@@ -1,16 +1,14 @@
 import { Directive, ElementRef, OnInit } from '@angular/core';
-import { BlogService } from '../services/blog.service';
 
 declare const $: any;
 
 @Directive({
-  selector: '.ui.button'
+  selector: '.ui.popup'
 })
 export class InitializePopupDirective implements OnInit {
 
   constructor(
-    private el: ElementRef,
-    private blogService: BlogService
+    private el: ElementRef
   ) { }
 
   public ngOnInit(){
@@ -27,6 +25,27 @@ export class InitializePopupDirective implements OnInit {
       transition: 'drop',
       hoverable: true
     });
+
+    $('.menu .user').popup({
+        inline: true,
+        hoverable: true,
+        on: 'click',
+        closable: true,
+        position : 'bottom left',
+        lastRestort: 'bottom left'
+      });
+
+      $('.menu .product').popup({
+          inline   : true,
+          hoverable: true,
+          position : 'bottom left',
+          lastResort: 'bottom left',
+          delay: {
+            show: 300,
+            hide: 500
+          }
+        });
+
   }
 
 }

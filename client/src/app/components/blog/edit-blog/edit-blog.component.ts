@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BlogService } from '../../../services/blog.service';
+import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 
 @Component({
   selector: 'app-edit-blog',
@@ -12,10 +13,11 @@ export class EditBlogComponent implements OnInit {
 
   messageClass: String;
   message: String;
-  blog: Object;
+  blog: any;
   isProcessing: Boolean = false;
   currentUrl: any;
   isLoading: Boolean = true;
+  public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/authentication/upload' });
 
   constructor(
     private location: Location,
@@ -39,6 +41,18 @@ export class EditBlogComponent implements OnInit {
       }
 
     });
+
+    this.uploader.onCompleteItem = (item:any, response:any, status:any, headers:any) => {
+      response = JSON.parse(response);
+      if(!response.success){
+        this.messageClass = 'negative visible';
+        this.message = response.message;
+      }else{
+        this.messageClass = 'positive visible';
+        this.message = response.message;
+        this.blog.image = '/images/' + Math.floor(Date.now() / 60000) + '_' + item.file.name;
+      }
+    };
   }
 
   updateBlogSubmit(){

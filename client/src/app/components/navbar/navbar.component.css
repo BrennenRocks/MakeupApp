@@ -1,0 +1,12 @@
+.main.menu{
+  background-color: #41c7f4;
+
+}
+
+.main.menu a{
+  font-weight: 700;
+}
+
+a.header.item{
+  font-size: 1.5em;
+}

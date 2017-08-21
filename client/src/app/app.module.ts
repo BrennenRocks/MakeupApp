@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 import { FlashMessagesModule } from 'angular2-flash-messages';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -24,6 +25,7 @@ import { AdminGuard} from './guards/admin.guard';
 import { InitializePopupDirective } from './directives/initialize-popup.directive';
 import { DeleteBlogComponent } from './components/blog/delete-blog/delete-blog.component';
 import { PublicProfileComponent } from './components/public-profile/public-profile.component';
+import { InitializeDropdownDirective } from './directives/initialize-dropdown.directive';
 
 
 @NgModule({
@@ -41,6 +43,7 @@ import { PublicProfileComponent } from './components/public-profile/public-profi
     EditBlogComponent,
     DeleteBlogComponent,
     PublicProfileComponent,
+    InitializeDropdownDirective
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,8 @@ import { PublicProfileComponent } from './components/public-profile/public-profi
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    FlashMessagesModule
+    FlashMessagesModule,
+    FileUploadModule
   ],
   providers: [AuthService, AuthGuard, NotAuthGuard, AdminGuard, BlogService],
   bootstrap: [AppComponent]

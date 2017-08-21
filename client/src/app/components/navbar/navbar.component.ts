@@ -12,7 +12,8 @@ declare const $: any;
 })
 export class NavbarComponent implements OnInit {
 
-  username: String;
+  user: any;
+  isLoading: Boolean = false;
 
   constructor(
     public authService: AuthService,
@@ -24,8 +25,9 @@ export class NavbarComponent implements OnInit {
     this.router.events.subscribe((val) => {
       if(this.authService.loggedIn()){
         if(val instanceof NavigationStart){
-          this.authService.getProfile().subscribe(data => { //passes back username, email, and role
-            this.username = data.user.username;
+          this.authService.getProfile().subscribe(data => { //passes back username, email, and role, aboutMe, image
+            this.user = data.user;
+            this.isLoading = true;
           },
           err => {
             console.log(err);
@@ -35,22 +37,13 @@ export class NavbarComponent implements OnInit {
       }
     });
 
-    $('.menu .browse').popup({
-        inline   : true,
-        hoverable: true,
-        position : 'bottom left',
-        lastResort: 'bottom left',
-        delay: {
-          show: 300,
-          hide: 500
-        }
-      });
   }
 
   onLogoutClick(){
     this.authService.logout();
     this.flashMessagesService.show("You are logged out", {cssClass: "ui positive message", timeout: 5000});
     this.router.navigate(['/']);
+    this.user = "";
   }
 
 }

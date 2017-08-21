@@ -6,22 +6,33 @@
 
 <form class="ui form" (submit)="updateBlogSubmit()" *ngIf="!isLoading">
   <div class="ui segment">
-    <!-- Title Field -->
-    <div class="field">
-      <label for="title">Title</label>
-      <div class="ui left icon input">
-        <i class="rocket icon"></i>
-        <input [disabled]="isProcessing" type="text" [(ngModel)]="blog.title" name="title" placeholder="Title">
+    <div class="ui grid">
+      <div class="ui medium rounded image four wide column">
+        <img src={{blog.image}}>
+        <input type="file" class="ui button" name="file" ng2FileSelect [uploader]="uploader">
+        <button type="button" class="ui button" (click)="uploader.uploadAll()" [disabled]="uploader.isReady || uploader.isUploading || uploader.isSuccess">
+          Upload
+        </button>
+      </div>
+      <div class="twelve wide column">
+        <!-- Title Field -->
+        <div class="field">
+          <label for="title">Title</label>
+          <div class="ui left icon input">
+            <i class="rocket icon"></i>
+            <input [disabled]="isProcessing" type="text" [(ngModel)]="blog.title" name="title" placeholder="Title">
+          </div>
+        </div>
+        <!-- Body Field -->
+        <div class="field">
+          <label for="body">Body</label>
+          <textarea [disabled]="isProcessing" [(ngModel)]="blog.body" name="body" rows="8" cols="80" placeholder="Body"></textarea>
+        </div>
+        <button [disabled]="isProcessing" class="ui red button" [routerLink]="['/delete-blog/', blog._id]">Delete</button>
+        <button [disabled]="isProcessing" class="ui orange button" (click)="goBack()">Cancel</button>
+        <input [disabled]="isProcessing" type="submit" class="ui olive submit button" value="Save Changes">
       </div>
     </div>
-    <!-- Body Field -->
-    <div class="field">
-      <label for="body">Body</label>
-      <textarea [disabled]="isProcessing" [(ngModel)]="blog.body" name="body" rows="8" cols="80" placeholder="Body"></textarea>
-    </div>
-    <button [disabled]="isProcessing" class="ui red button" [routerLink]="['/delete-blog/', blog._id]">Delete</button>
-    <button [disabled]="isProcessing" class="ui orange button" (click)="goBack()">Cancel</button>
-    <input [disabled]="isProcessing" type="submit" class="ui olive submit button" value="Save Changes">
   </div>
 </form>
 

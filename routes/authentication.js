@@ -7,6 +7,8 @@ const express  = require('express');
 const router   = express.Router();
 const jwt      = require('jsonwebtoken');
 const config   = require('../config/database');
+const multer   = require('multer');
+const fs       = require('fs');
 
 //Register User!
 router.post('/register', (req, res) => {
@@ -109,7 +111,7 @@ router.get('/publicProfile/:username', (req, res) => {
   if (!req.params.username) {
     res.json({ success: false, message: 'No username was provided' });
   }else {
-    User.findOne({ username: req.params.username }).select('username email role').exec((err, user) => {
+    User.findOne({ username: req.params.username }).select('username email role image aboutMe').exec((err, user) => {
       if (err) {
         res.json({ success: false, message: 'Something went wrong' });
       }else if (!user) {
@@ -119,6 +121,49 @@ router.get('/publicProfile/:username', (req, res) => {
       }
     });
   }
+});
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads/images/');
+  },
+
+  filename: function (req, file, cb) {
+    if (!file.originalname.match(/\.(jpeg|jpg|png)$/)) {
+      var err = new Error();
+      err.code = 'filetype';
+      return cb(err);
+    }else {
+      cb(null, Math.floor(Date.now() / 60000) + '_' + file.originalname);
+    }
+  }
+});
+
+var upload = multer({
+  storage: storage,
+  limits: { fileSize: 10000000 }
+}).single('file');
+
+router.post('/upload', function (req, res) {
+  upload(req, res, function (err) {
+    if (err) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        res.json({ success: false, message: 'File size is too large. Max limit is 10MB' });
+      }else if (err.code === 'filetype') {
+        res.json({ success: false, message: 'File type is invalid. Must be .jpg .jpeg .png' });
+      }else {
+        console.log(err);
+        res.json({ success: false, message: 'File was not able to be uploaded' });
+      }
+    }else {
+      if (!req.file) {
+        res.json({ success: false, message: 'No file was selected' });
+      }else {
+        res.json({ success: true, message: 'File was uploaded!' });
+      }
+    }
+
+  });
 });
 
 //Middelware to get Token for Login Authorization
@@ -139,13 +184,45 @@ router.use((req, res, next) => {
 });
 
 router.get('/profile', (req, res) => {
-  User.findOne({ _id: req.decoded.userId }).select('username email role').exec((err, user) => {
+  User.findOne({ _id: req.decoded.userId }).select('username email role aboutMe image').exec((err, user) => {
     if (err) {
       res.json({ success: false, message: err });
     }else if (!user) {
       res.json({ success: false, message: 'User not found' });
     }else {
       res.json({ success: true, user: user });
+    }
+  });
+});
+
+router.put('/updateUser', (req, res) => {
+  User.findOne({ _id: req.decoded.userId }, (err, user) => {
+    if (err) {
+      res.json({ success: false, message: err });
+    }else if (!user) {
+      res.json({ success: false, message: 'Unable to authenticate user' });
+    }else {
+      if (user.image !== req.body.image) {
+        if (user.image !== '/images/defaultUser.png') {
+          fs.unlink(__dirname + '/../uploads' + user.image, (err) => {
+            if (err) {
+              console.log(err);
+            }
+          });
+        }
+
+        user.image = req.body.image;
+      }
+
+      user.aboutMe = req.body.aboutMe;
+      user.save({ validateBeforeSave: false }, (err) => {
+        if (err) {
+          console.log(err);
+          res.json({ success: false, message: err });
+        }else {
+          res.json({ success: true, message: 'Your information has been updated!' });
+        }
+      });
     }
   });
 });

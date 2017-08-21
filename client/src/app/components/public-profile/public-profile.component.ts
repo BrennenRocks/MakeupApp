@@ -12,7 +12,7 @@ export class PublicProfileComponent implements OnInit {
   messageClass: String;
   message: String;
   currentUrl: any;
-  username: String;
+  user: any;
   foundProfile: Boolean = false;
 
   constructor(
@@ -29,7 +29,7 @@ export class PublicProfileComponent implements OnInit {
         this.messageClass = 'negative visible';
         this.message = data.message;
       }else{
-        this.username = data.user.username;
+        this.user = data.user;
         this.foundProfile = true;
       }
 

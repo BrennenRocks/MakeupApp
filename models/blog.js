@@ -22,7 +22,7 @@ let alphaNumericTitleChecker = (title) => {
   if (!title) {
     return false;
   }else {
-    const re = /^[a-zA-Z0-9 ]+$/;
+    const re = /^[a-zA-Z0-9 ']+$/;
     return re.test(title);
   }
 };
@@ -78,7 +78,7 @@ const commentValidators = [
 
 const blogSchema = mongoose.Schema({
   title: { type: String, required: true, validate: titleValidators },
-  image: { type: String },
+  image: { type: String, default: '/images/defaultBlog.png' },
   body: { type: String, required: true, validate: bodyValidators },
   createdBy: { type: String },
   createdAt: { type: Date, default: Date.now() },
@@ -90,6 +90,7 @@ const blogSchema = mongoose.Schema({
     {
       comment: { type: String, validate: commentValidators },
       commentator: { type: String },
+      image: { type: String },
       createdAt: { type: Date, default: Date.now() }
     }
   ]

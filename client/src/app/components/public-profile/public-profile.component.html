@@ -8,11 +8,28 @@
   <div class="ui divided items">
     <div class="item">
       <div class="content">
-        <div class="header">
-          About Me
+        <div class="ui grid">
+          <div class="ui medium rounded image four wide column">
+            <img src={{user.image}} alt="User Picture Here">
+          </div>
+          <div class="twelve wide column">
+            <div class="ui header">
+              {{ user.username }}
+            </div>
+            <div class="meta">
+              <div class="cinema">About Me</div>
+            </div>
+            <div class="description">
+              <p>{{ user.aboutMe }}</p>
+            </div>
+          </div>
         </div>
-        <div class="description">
-          <p>This is where you will be able to say where you like to shop and your favorite brands</p>
+      </div>
+    </div>
+    <div class="item">
+      <div class="content">
+        <div class="header">
+          Liked Items
         </div>
       </div>
     </div>

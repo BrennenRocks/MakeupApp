@@ -2,6 +2,7 @@ import { Component, OnInit, Directive } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { BlogService } from '../../services/blog.service';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 
 declare const $: any;
 
@@ -21,8 +22,10 @@ export class BlogComponent implements OnInit {
   newPost: Boolean = false;
   isProcessing: Boolean = false;
   blogPosts: [Object];
+  imageName: String;
   newComment = [];
   enabledComments = [];
+  public uploader: FileUploader = new FileUploader({ url: 'http://localhost:8080/authentication/upload' });
 
   constructor(
     public authService: AuthService,
@@ -44,6 +47,18 @@ export class BlogComponent implements OnInit {
       this.userRole = 'viewer';
     }
     this.getAllBlogs();
+
+    this.uploader.onCompleteItem = (item:any, response:any, status:any, headers:any) => {
+      response = JSON.parse(response);
+      if(!response.success){
+        this.messageClass = 'negative visible';
+        this.message = response.message;
+      }else{
+        this.messageClass = 'positive visible';
+        this.message = response.message;
+        this.imageName = '/images/' + Math.floor(Date.now() / 60000) + '_' + item.file.name;
+      }
+    };
   }
 
   isAdmin(){
@@ -152,6 +167,7 @@ export class BlogComponent implements OnInit {
     const blog = {
       title: this.form.get('title').value,
       body: this.form.get('body').value,
+      image: this.imageName,
       createdBy: this.username
     }
 

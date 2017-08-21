@@ -11,14 +11,11 @@
     <div class="ui segment">
       <div class="ui grid">
         <div class="ui medium rounded image four wide column">
-          <img src="/images/defaultBlog.png">
-          <button class="ui button">Browse</button>
-          <div class="ui active progress">
-            <div class="bar">
-              <div class="progress"></div>
-            </div>
-            <div class="label">Uploading Image</div>
-          </div>
+          <img src="./images/defaultBlog.png">
+          <input type="file" class="ui button" name="file" ng2FileSelect [uploader]="uploader">
+          <button type="button" class="ui button" (click)="uploader.uploadAll()" [disabled]="uploader.isReady || uploader.isUploading || uploader.isSuccess">
+            Upload
+          </button>
         </div>
         <div class="twelve wide column">
           <!-- Title Field -->
@@ -61,9 +58,8 @@
 <div class="ui top segment">
     <div class="ui divided items">
         <div *ngFor="let blog of blogPosts" class="item">
-            <div class="image">
-                <!-- <img src=""> -->
-                Image
+            <div class="ui small image">
+                <img src={{blog.image}} alt="Picture that was Uploaded">
             </div>
             <div class="content">
                 <a class="header" href="#">{{ blog.title }}</a>
@@ -150,9 +146,9 @@
                 <div class="ui small minimal comments segment" *ngIf="enabledComments.indexOf(blog._id) > -1">
                   <h3 class="ui dividing header">Comments</h3>
                   <div class="comment" *ngFor="let comment of blog.comments">
-                    <!-- <a class="avatar">
-                      <img src="/images/avatar/small/joe.jpg">
-                    </a> -->
+                    <a class="avatar">
+                      <img src={{comment.image}}>
+                    </a>
                     <div class="content">
                       <a class="author">{{ comment.commentator }}</a>
                       <div class="metadata">

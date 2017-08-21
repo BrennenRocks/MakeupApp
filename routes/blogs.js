@@ -8,6 +8,7 @@ const express  = require('express');
 const router   = express.Router();
 const jwt      = require('jsonwebtoken');
 const config   = require('../config/database');
+const fs       = require('fs');
 
 router.post('/newBlog', (req, res) => {
   if (!req.body.title) {
@@ -19,6 +20,7 @@ router.post('/newBlog', (req, res) => {
   }else {
     const blog = new Blog({
       title: req.body.title,
+      image: req.body.image,
       body: req.body.body,
       createdBy: req.body.createdBy
     });
@@ -115,6 +117,15 @@ router.put('/updateBlog', (req, res) => {
           }else if (user.username !== blog.createdBy) {
             res.json({ success: false, message: 'You are not authorized to edit this blog post' });
           }else {
+            if (blog.image !== req.body.image) {
+              fs.unlink(__dirname + '/../uploads' + blog.image, (err) => {
+                if (err) {
+                  console.log(err);
+                }
+              });
+              blog.image = req.body.image;
+            }
+
             blog.title = req.body.title;
             blog.body = req.body.body;
             blog.save((err) => {
@@ -153,6 +164,11 @@ router.delete('/deleteBlog/:id', (req, res) => {
               if (err) {
                 res.json({ success: false, message: err });
               }else {
+                fs.unlink(__dirname + '/../uploads' + blog.image, (err) => {
+                  if (err) {
+                    console.log(err);
+                  }
+                });
                 res.json({ success: true, message: 'Blog deleted!' });
               }
             });
@@ -295,7 +311,8 @@ router.post('/comment', (req, res) => {
           }else {
             blog.comments.push({
               comment: req.body.comment,
-              commentator: user.username
+              commentator: user.username,
+              image: user.image
             });
             blog.save((err) => {
               if (err) {

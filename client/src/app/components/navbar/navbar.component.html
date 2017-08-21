@@ -1,11 +1,12 @@
-<div class="ui borderless menu">
+<div class="ui main borderless menu">
+  <div class="ui container">
   <a class="header item" routerLink="/" >Makeup</a>
   <a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/">Home</a>
-  <a class="browse item">
+  <a class="product item">
     Face
     <i class="dropdown icon"></i>
   </a>
-  <div class="ui container popup transition hidden">
+  <div class="ui flowing popup transition hidden">
     <div class="ui three column relaxed equal height divided grid">
       <div class="column">
         <a class="ui small header">Eyes</a>
@@ -43,17 +44,28 @@
         <button class="ui button">Submit</button>
       </div>
     </div>
-    <a class="item" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/dashboard">Dashboard</a>
-    <a class="item" *ngIf="authService.loggedIn()" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/profile">Hello, {{ username }}</a>
     <a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/blog">Blog</a>
+    <!-- testing user dropdown -->
+    <a class="user item" *ngIf="authService.loggedIn() && isLoading">
+      <img src={{user.image}} alt="" class="ui avatar image">
+      {{ user.username }}
+      <i class="dropdown icon"></i>
+    </a>
+    <div class="ui popup transition hidden" *ngIf="authService.loggedIn() && isLoading">
+      <div class="ui secondary vertical menu">
+        <a class="item" routerLink="/profile">My Profile</a>
+        <a class="item" routerLink="/dashboard">Dashboard</a>
+        <div class="ui divider"></div>
+        <a class="item" (click)="onLogoutClick()">Logout</a>
+      </div>
+    </div>
+    <a class="item" *ngIf="authService.loggedIn()"(click)="onLogoutClick()">Logout</a>
     <div class="item" *ngIf="!authService.loggedIn()">
       <div class="ui pink button" routerLink="/login">Login</div>
     </div>
     <div class="item" *ngIf="!authService.loggedIn()">
       <div class="ui blue button" routerLink="/register">Sign Up</div>
     </div>
-    <div class="item" *ngIf="authService.loggedIn()">
-      <div class="ui blue button" (click)="onLogoutClick()">Logout</div>
-    </div>
+  </div>
   </div>
 </div>
