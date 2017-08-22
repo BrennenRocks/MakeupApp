@@ -59,7 +59,7 @@
         <a class="item" (click)="onLogoutClick()">Logout</a>
       </div>
     </div>
-    <a class="item" *ngIf="authService.loggedIn()"(click)="onLogoutClick()">Logout</a>
+    <!-- <a class="item" *ngIf="authService.loggedIn()"(click)="onLogoutClick()">Logout</a> -->
     <div class="item" *ngIf="!authService.loggedIn()">
       <div class="ui pink button" routerLink="/login">Login</div>
     </div>
