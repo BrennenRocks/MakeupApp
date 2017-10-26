@@ -40,6 +40,7 @@ const productSchema = mongoose.Schema({
       price: String
     }
   ],
+  likes: { type: Number, default: 0 },
   comments: [
     {
       comment: { type: String, validate: commentValidators },

@@ -31,13 +31,14 @@ export class ProfileComponent implements OnInit {
 
     this.uploader.onCompleteItem = (item:any, response:any, status:any, headers:any) => {
       response = JSON.parse(response);
+      console.log(response);
       if(!response.success){
         this.messageClass = 'negative visible';
         this.message = response.message;
       }else{
         this.messageClass = 'positive visible';
         this.message = response.message;
-        this.user.image = '/images/' + Math.floor(Date.now() / 60000) + '_' + item.file.name;
+        this.user.imagePath = response.imagePath;
       }
     };
   }
@@ -61,6 +62,7 @@ export class ProfileComponent implements OnInit {
           this.isProcessing = false;
           this.messageClass = 'hidden';
         }, 1500);
+        //location.reload();
       }
     });
   }

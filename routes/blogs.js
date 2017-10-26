@@ -10,6 +10,35 @@ const jwt      = require('jsonwebtoken');
 const config   = require('../config/database');
 const fs       = require('fs');
 
+router.get('/allBlogs', (req, res) => {
+  Blog.find({}, (err, blogs) => {
+    if (err) {
+      res.json({ success: false, message: err });
+    }else if (!blogs) {
+      res.json({ success: false, message: 'No blogs found' });
+    }else {
+      res.json({ success: true, blogs: blogs });
+    }
+  }).sort({ _id: -1 });
+});
+
+//Middelware to get Token for Login Authorization
+router.use((req, res, next) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    res.json({ success: false, message: 'No Token provided' });
+  }else {
+    jwt.verify(token, config.secret, (err, decoded) => {
+      if (err) {
+        res.json({ success: false, message: 'Token Invalid: ' + err });
+      }else {
+        req.decoded = decoded;
+        next();
+      }
+    });
+  }
+});
+
 router.post('/newBlog', (req, res) => {
   if (!req.body.title) {
     res.json({ success: false, message: 'Blog Title is required' });
@@ -44,35 +73,6 @@ router.post('/newBlog', (req, res) => {
   }
 });
 
-router.get('/allBlogs', (req, res) => {
-  Blog.find({}, (err, blogs) => {
-    if (err) {
-      res.json({ success: false, message: err });
-    }else if (!blogs) {
-      res.json({ success: false, message: 'No blogs found' });
-    }else {
-      res.json({ success: true, blogs: blogs });
-    }
-  }).sort({ _id: -1 });
-});
-
-//Middelware to get Token for Login Authorization
-router.use((req, res, next) => {
-  const token = req.headers.authorization;
-  if (!token) {
-    res.json({ success: false, message: 'No Token provided' });
-  }else {
-    jwt.verify(token, config.secret, (err, decoded) => {
-      if (err) {
-        res.json({ success: false, message: 'Token Invalid: ' + err });
-      }else {
-        req.decoded = decoded;
-        next();
-      }
-    });
-  }
-});
-
 router.get('/singleBlog/:id', (req, res) => {
   if (!req.params.id) {
     res.json({ success: false, message: 'No Blog ID was provided' });
@@ -99,6 +99,7 @@ router.get('/singleBlog/:id', (req, res) => {
   }
 });
 
+//TODO: Need to change file pathing
 router.put('/updateBlog', (req, res) => {
   if (!req.body._id) {
     res.json({ success: false, message: 'No Blog ID was provided' });
@@ -142,6 +143,7 @@ router.put('/updateBlog', (req, res) => {
   }
 });
 
+//TODO: Need to change file pathing
 router.delete('/deleteBlog/:id', (req, res) => {
   if (!req.params.id) {
     res.json({ success: false, message: 'No ID provided' });

@@ -2,13 +2,25 @@
 
 // jscs:disable requireTrailingComma
 // jscs:disable maximumLineLength
-const User = require('../models/user');
+const User     = require('../models/user');
 const express  = require('express');
 const router   = express.Router();
 const jwt      = require('jsonwebtoken');
 const config   = require('../config/database');
+const aws      = require('aws-sdk');
 const multer   = require('multer');
+const multerS3 = require('multer-s3');
 const fs       = require('fs');
+
+aws.config.update({
+    secretAccessKey: process.env.SECRETKEY,
+    accessKeyId: process.env.KEY,
+    region: 'us-west-1'
+});
+const s3       = new aws.S3();
+
+var awsFilePath;
+var imageName;
 
 //Register User!
 router.post('/register', (req, res) => {
@@ -111,7 +123,8 @@ router.get('/publicProfile/:username', (req, res) => {
   if (!req.params.username) {
     res.json({ success: false, message: 'No username was provided' });
   }else {
-    User.findOne({ username: req.params.username }).select('username email role image aboutMe').exec((err, user) => {
+    User.findOne({ username: req.params.username }).select('-password -image').exec((err, user) => {
+    //User.findOne({ username: req.params.username }).select('username email role imagePath aboutMe').exec((err, user) => {
       if (err) {
         res.json({ success: false, message: 'Something went wrong' });
       }else if (!user) {
@@ -123,24 +136,28 @@ router.get('/publicProfile/:username', (req, res) => {
   }
 });
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './uploads/images/');
-  },
-
-  filename: function (req, file, cb) {
-    if (!file.originalname.match(/\.(jpeg|jpg|png)$/)) {
-      var err = new Error();
-      err.code = 'filetype';
-      return cb(err);
-    }else {
-      cb(null, Math.floor(Date.now() / 60000) + '_' + file.originalname);
-    }
-  }
-});
-
+/***********************************
+* Start File Uploading Middleware **
+************************************/
 var upload = multer({
-  storage: storage,
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.BUCKET,
+    acl: 'public-read',
+    metadeta: function(req, file, cb){
+      cb(null, {fieldName: file.fieldName});
+    },
+    key: function(req, file, cb){
+      if (!file.originalname.match(/\.(jpeg|jpg|png)$/)) {
+        var err = new Error();
+        err.code = 'filetype';
+        return cb(err);
+      }else {
+        imageName = Math.floor(Date.now() / 60000) + '_' + file.originalname;
+        cb(null, imageName);
+      }
+    }
+  }),
   limits: { fileSize: 10000000 }
 }).single('file');
 
@@ -159,7 +176,8 @@ router.post('/upload', function (req, res) {
       if (!req.file) {
         res.json({ success: false, message: 'No file was selected' });
       }else {
-        res.json({ success: true, message: 'File was uploaded!' });
+        awsFilePath = req.file.location;
+        res.json({ success: true, message: 'File was uploaded! Be sure to hit save!', imagePath: awsFilePath });
       }
     }
 
@@ -184,7 +202,7 @@ router.use((req, res, next) => {
 });
 
 router.get('/profile', (req, res) => {
-  User.findOne({ _id: req.decoded.userId }).select('username email role aboutMe image').exec((err, user) => {
+  User.findOne({ _id: req.decoded.userId }).select('username email role aboutMe imagePath').exec((err, user) => {
     if (err) {
       res.json({ success: false, message: err });
     }else if (!user) {
@@ -202,16 +220,24 @@ router.put('/updateUser', (req, res) => {
     }else if (!user) {
       res.json({ success: false, message: 'Unable to authenticate user' });
     }else {
-      if (user.image !== req.body.image) {
-        if (user.image !== '/images/defaultUser.png') {
-          fs.unlink(__dirname + '/../uploads' + user.image, (err) => {
-            if (err) {
-              console.log(err);
+      if (user.imagePath !== awsFilePath) {
+        if (user.imagePath !== '/images/defaultUser.png') {
+          var params = {
+           Bucket: "makeupapp",
+           Key: user.image
+          };
+          s3.deleteObject(params, function(err, data) {
+            if (err) console.log(err, err.stack); // an error occurred
+            // successful response
+            /*
+            data = {
             }
+            */
           });
+          user.image = imageName;
         }
 
-        user.image = req.body.image;
+        user.imagePath = awsFilePath;
       }
 
       user.aboutMe = req.body.aboutMe;

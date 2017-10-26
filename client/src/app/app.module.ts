@@ -19,6 +19,7 @@ import { ProductsComponent } from './components/products/products.component';
 
 import { AuthService } from './services/auth.service';
 import { BlogService } from './services/blog.service';
+import { ProductService } from './services/product.service';
 import { AuthGuard } from './guards/auth.guard';
 import { NotAuthGuard } from './guards/notAuth.guard';
 import { AdminGuard} from './guards/admin.guard';
@@ -54,7 +55,7 @@ import { InitializeDropdownDirective } from './directives/initialize-dropdown.di
     FlashMessagesModule,
     FileUploadModule
   ],
-  providers: [AuthService, AuthGuard, NotAuthGuard, AdminGuard, BlogService],
+  providers: [AuthService, AuthGuard, NotAuthGuard, AdminGuard, BlogService, ProductService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

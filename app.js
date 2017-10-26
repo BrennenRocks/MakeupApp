@@ -20,16 +20,17 @@ mongoose.connect(config.database, (err) => {
 
 const port = process.env.PORT || 8080;
 
-// app.use(function (req, res, next) {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//     res.header('Access-Control-Allow-Credentials', true);
-//     next();
-//   });
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Credentials', true);
+    next();
+  });
 
 const authentication = require('./routes/authentication');
 const blogs = require('./routes/blogs');
+const products = require('./routes/products');
 
 //MIDDLEWARE
 app.use(cors({ origin: 'http://localhost:4200' }));
@@ -42,6 +43,7 @@ app.use(express.static(__dirname + '/uploads'));
 
 app.use('/authentication', authentication);
 app.use('/blogs', blogs);
+app.use('/products', products);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/public/index.html'));

@@ -47,7 +47,7 @@
     <a class="item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" routerLink="/blog">Blog</a>
     <!-- testing user dropdown -->
     <a class="user item" *ngIf="authService.loggedIn() && isLoading">
-      <img src={{user.image}} alt="" class="ui avatar image">
+      <img src={{user.imagePath}} alt="" class="ui avatar image">
       {{ user.username }}
       <i class="dropdown icon"></i>
     </a>
