@@ -50,11 +50,13 @@ export class EditBlogComponent implements OnInit {
       }else{
         this.messageClass = 'positive visible';
         this.message = response.message;
-        this.blog.image = '/images/' + Math.floor(Date.now() / 60000) + '_' + item.file.name;
+        this.blog.image = response.imagePath;
       }
     };
   }
 
+  /*Blog data is updated in the HTML with [(ngModel)] which is why we don't
+    see it here*/
   updateBlogSubmit(){
     this.isProcessing = true;
     this.blogService.editBlog(this.blog).subscribe(data => {

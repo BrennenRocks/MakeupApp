@@ -25,7 +25,7 @@ export class BlogComponent implements OnInit {
   imageName: String;
   newComment = [];
   enabledComments = [];
-  public uploader: FileUploader = new FileUploader({ url: 'authentication/upload' });
+  public uploader: FileUploader = new FileUploader({ url: this.authService.domain + 'authentication/upload' });
 
   constructor(
     public authService: AuthService,
@@ -56,7 +56,8 @@ export class BlogComponent implements OnInit {
       }else{
         this.messageClass = 'positive visible';
         this.message = response.message;
-        this.imageName = '/images/' + Math.floor(Date.now() / 60000) + '_' + item.file.name;
+        console.log(response);
+        this.imageName = response.imagePath;
       }
     };
   }

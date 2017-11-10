@@ -99,7 +99,6 @@ router.get('/singleBlog/:id', (req, res) => {
   }
 });
 
-//TODO: Need to change file pathing
 router.put('/updateBlog', (req, res) => {
   if (!req.body._id) {
     res.json({ success: false, message: 'No Blog ID was provided' });
@@ -118,15 +117,7 @@ router.put('/updateBlog', (req, res) => {
           }else if (user.username !== blog.createdBy) {
             res.json({ success: false, message: 'You are not authorized to edit this blog post' });
           }else {
-            if (blog.image !== req.body.image) {
-              fs.unlink(__dirname + '/../uploads' + blog.image, (err) => {
-                if (err) {
-                  console.log(err);
-                }
-              });
-              blog.image = req.body.image;
-            }
-
+            blog.image = req.body.image;
             blog.title = req.body.title;
             blog.body = req.body.body;
             blog.save((err) => {
@@ -143,7 +134,6 @@ router.put('/updateBlog', (req, res) => {
   }
 });
 
-//TODO: Need to change file pathing
 router.delete('/deleteBlog/:id', (req, res) => {
   if (!req.params.id) {
     res.json({ success: false, message: 'No ID provided' });
@@ -166,11 +156,6 @@ router.delete('/deleteBlog/:id', (req, res) => {
               if (err) {
                 res.json({ success: false, message: err });
               }else {
-                fs.unlink(__dirname + '/../uploads' + blog.image, (err) => {
-                  if (err) {
-                    console.log(err);
-                  }
-                });
                 res.json({ success: true, message: 'Blog deleted!' });
               }
             });
@@ -314,7 +299,7 @@ router.post('/comment', (req, res) => {
             blog.comments.push({
               comment: req.body.comment,
               commentator: user.username,
-              image: user.image
+              image: user.imagePath
             });
             blog.save((err) => {
               if (err) {

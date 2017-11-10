@@ -106,7 +106,7 @@ const passwordValidators = [
 const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, validate: emailValidators },
   image: { type: String },
-  imagePath: { type: String, default: '/images/defaultUser.png' },
+  imagePath: { type: String, default: 'https://images.raidycheck.com/defaultUser.png' },
   username: { type: String, required: true, unique: true, lowercase: true, validate: usernameValidators },
   password: { type: String, required: true, validate: passwordValidators },
   role: { type: String, required: false, default: 'user' },

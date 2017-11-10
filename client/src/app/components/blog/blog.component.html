@@ -146,11 +146,11 @@
                 <div class="ui small minimal comments segment" *ngIf="enabledComments.indexOf(blog._id) > -1">
                   <h3 class="ui dividing header">Comments</h3>
                   <div class="comment" *ngFor="let comment of blog.comments">
-                    <a class="avatar">
+                    <a class="avatar" [routerLink]="['/user/', comment.commentator]">
                       <img src={{comment.image}}>
                     </a>
                     <div class="content">
-                      <a class="author">{{ comment.commentator }}</a>
+                      <a class="author" [routerLink]="['/user/', comment.commentator]">{{ comment.commentator }}</a>
                       <div class="metadata">
                         <span class="date">{{ comment.createdAt | date: 'MMM dd, yyyy' }}</span>
                       </div>
